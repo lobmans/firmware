@@ -1,58 +1,87 @@
-// For OLED LCD
-#define I2C_SDA 21
-#define I2C_SCL 22
+#ifndef _VARIANT_DIY_V1_1_
+#define _VARIANT_DIY_V1_1_
 
-// GPS
-#undef GPS_RX_PIN
-#define GPS_RX_PIN 15
-
-#define BUTTON_PIN 2 // The middle button GPIO on the T-Beam
+// ====================================================================
+// ИНТЕРФЕЙС И КНОПКИ
+// ====================================================================
+#undef BUTTON_PIN
+#define BUTTON_PIN 2              // Кнопка управления нодой
 #define BUTTON_NEED_PULLUP
-#define EXT_NOTIFY_OUT 12 // Overridden default pin to use for Ext Notify Module (#975).
+#undef EXT_NOTIFY_OUT
+#define EXT_NOTIFY_OUT 12         // Пин для модулей уведомлений
 
-#define LORA_DIO0 4  // a No connect on the SX1262/SX1268 module
-#define LORA_RESET 18 // RST for SX1276, and for SX1262/SX1268
-#define LORA_DIO1 -1  // IRQ for SX1262/SX1268
-#define LORA_DIO2 -1  // BUSY for SX1262/SX1268
-#define LORA_DIO3     // Not connected on PCB, but internally on the TTGO SX1262/SX1268, if DIO3 is high the TXCO is enabled
-
-// In transmitting, set TXEN as high communication level，RXEN pin is low level;
-// In receiving, set RXEN as high communication level, TXEN is lowlevel;
-// Before powering off, set TXEN、RXEN as low level.
-#define LORA_RXEN 14 // Input - RF switch RX control, connecting external MCU IO, valid in high level
-#define LORA_TXEN 13 // Input - RF switch TX control, connecting external MCU IO or DIO2, valid in high level
-
+// ====================================================================
+// ШИНА SPI (Контроллер ESP32)
+// ====================================================================
 #undef LORA_SCK
-#define LORA_SCK 5
+#define LORA_SCK 5                // Тактовый сигнал (SCK) -> к SCK модуля
 #undef LORA_MISO
-#define LORA_MISO 19
+#define LORA_MISO 19              // Вход данных (MISO)    -> к MISO модуля
 #undef LORA_MOSI
-#define LORA_MOSI 27
+#define LORA_MOSI 27              // Выход данных (MOSI)   -> к MOSI модуля
 #undef LORA_CS
-#define LORA_CS 21
+#define LORA_CS 21                // Выбор чипа (NSS)      -> к NSS/CS модуля
 
-// RX/TX for RFM95/SX127x
-#define RF95_RXEN LORA_RXEN
-#define RF95_TXEN LORA_TXEN
-// #define RF95_TCXO <GPIO#>
+// ====================================================================
+// ПИНЫ ПРЕРЫВАНИЙ И СБРОСА ДЛЯ RF96 (SX127x)
+// ====================================================================
+#undef LORA_DIO0
+#define LORA_DIO0 4               // ОБЯЗАТЕЛЬНО: Аппаратное прерывание -> к DIO0 модуля
+#undef LORA_RESET
+#define LORA_RESET 18             // Сброс модуля          -> к RST модуля
 
-// common pinouts for SX126X modules
-#define SX126X_CS 5
-#define SX126X_DIO1 LORA_DIO1
-#define SX126X_BUSY LORA_DIO2
-#define SX126X_RESET LORA_RESET
-#define SX126X_RXEN LORA_RXEN
-#define SX126X_TXEN LORA_TXEN
+// Заглушки отсутствующих пинов для компилятора GitHub
+#undef LORA_DIO1
+#define LORA_DIO1 -1              
+#undef LORA_DIO2
+#define LORA_DIO2 -1              
+#undef LORA_DIO3
+#define LORA_DIO3 -1
 
-// supported modules list
-#define USE_RF95 // RFM95/SX127x
-#define USE_SX1262
-#define USE_SX1268
-#define USE_LLCC68
+// ====================================================================
+// УПРАВЛЕНИЕ АНТЕННОЙ (ОТКЛЮЧЕНО, так как пинов физически нет)
+// ====================================================================
+#undef LORA_RXEN
+#define LORA_RXEN -1              // Убираем пин 14, ставим заглушку -1
+#undef LORA_TXEN
+#define LORA_TXEN -1              // Убираем пин 13, ставим заглушку -1
 
-#ifdef EBYTE_E22
-// Internally the TTGO module hooks the SX126x-DIO2 in to control the TX/RX switch
-// (which is the default for the sx1262interface code)
-#define SX126X_DIO3_TCXO_VOLTAGE 1.8
-#define TCXO_OPTIONAL // make it so that the firmware can try both TCXO and XTAL
-#endif
+// Полностью убираем маппинг переключателей в драйвере
+#undef RF95_RXEN
+#define RF95_RXEN -1
+#undef RF95_TXEN
+#define RF95_TXEN -1
+#undef RF95_DIO1
+#define RF95_DIO1 -1
+
+// ====================================================================
+// АКТИВНЫЙ ДРАЙВЕР РАДИОМОДУЛЯ И ЗАЩИТА СТРУКТУРЫ ТАРГЕТА
+// ====================================================================
+#undef USE_RF95
+#define USE_RF95                  // Включаем драйвер только для серии SX127x (RF96)
+
+// Глушим макросы SX126X, чтобы они не вызывали ошибки сборки таргета v1_1
+#undef SX126X_CS
+#define SX126X_CS -1
+#undef SX126X_DIO1
+#define SX126X_DIO1 -1
+#undef SX126X_RESET
+#define SX126X_RESET -1
+
+// Полностью деактивируем компиляцию кода для SX126X/LLCC68
+#undef USE_SX1262
+#undef USE_SX1268
+#undef USE_LLCC68
+
+// ====================================================================
+// ОТКЛЮЧЕНИЕ НЕИСПОЛЬЗУЕМОГО ОБОРУДОВАНИЯ (GPS И ДИСПЛЕЙ)
+// ====================================================================
+#undef GPS_RX_PIN                 
+#undef GPS_TX_PIN
+#undef HAS_GPS
+#define HAS_GPS 0                 
+
+#undef HAS_DISPLAY
+#define HAS_DISPLAY 0             
+
+#endif /* _VARIANT_DIY_V1_1_ */
