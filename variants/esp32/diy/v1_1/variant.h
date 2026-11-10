@@ -10,11 +10,11 @@
 #define BUTTON_NEED_PULLUP
 #define EXT_NOTIFY_OUT 12 // Overridden default pin to use for Ext Notify Module (#975).
 
-#define LORA_DIO0 26  // a No connect on the SX1262/SX1268 module
-#define LORA_RESET 27 // RST for SX1276, and for SX1262/SX1268
-#define LORA_DIO1 33  // IRQ for SX1262/SX1268
-#define LORA_DIO2 32  // BUSY for SX1262/SX1268
-#define LORA_DIO3     // Not connected on PCB, but internally on the TTGO SX1262/SX1268, if DIO3 is high the TXCO is enabled
+#define LORA_DIO0 4  // a No connect on the SX1262/SX1268 module
+#define LORA_RESET 18 // RST for SX1276, and for SX1262/SX1268
+//#define LORA_DIO1 33  // IRQ for SX1262/SX1268
+//#define LORA_DIO2 32  // BUSY for SX1262/SX1268
+//#define LORA_DIO3     // Not connected on PCB, but internally on the TTGO SX1262/SX1268, if DIO3 is high the TXCO is enabled
 
 // In transmitting, set TXEN as high communication level，RXEN pin is low level;
 // In receiving, set RXEN as high communication level, TXEN is lowlevel;
@@ -23,13 +23,13 @@
 #define LORA_TXEN 13 // Input - RF switch TX control, connecting external MCU IO or DIO2, valid in high level
 
 #undef LORA_SCK
-#define LORA_SCK 18
+#define LORA_SCK 5
 #undef LORA_MISO
 #define LORA_MISO 19
 #undef LORA_MOSI
 #define LORA_MOSI 27
 #undef LORA_CS
-#define LORA_CS 5
+#define LORA_CS 21
 
 // RX/TX for RFM95/SX127x
 #define RF95_RXEN LORA_RXEN
