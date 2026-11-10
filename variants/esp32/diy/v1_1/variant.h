@@ -12,9 +12,9 @@
 
 #define LORA_DIO0 4  // a No connect on the SX1262/SX1268 module
 #define LORA_RESET 18 // RST for SX1276, and for SX1262/SX1268
-//#define LORA_DIO1 33  // IRQ for SX1262/SX1268
-//#define LORA_DIO2 32  // BUSY for SX1262/SX1268
-//#define LORA_DIO3     // Not connected on PCB, but internally on the TTGO SX1262/SX1268, if DIO3 is high the TXCO is enabled
+#define LORA_DIO1 -1  // IRQ for SX1262/SX1268
+#define LORA_DIO2 -1  // BUSY for SX1262/SX1268
+#define LORA_DIO3     // Not connected on PCB, but internally on the TTGO SX1262/SX1268, if DIO3 is high the TXCO is enabled
 
 // In transmitting, set TXEN as high communication level，RXEN pin is low level;
 // In receiving, set RXEN as high communication level, TXEN is lowlevel;
